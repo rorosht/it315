@@ -1,0 +1,7 @@
+$kind: http-request
+description: ""
+url: http://127.0.0.1:8000/api/students
+method: GET
+headers:
+  Accept: application/json
+order: 1000
