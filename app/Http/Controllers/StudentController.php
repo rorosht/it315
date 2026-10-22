@@ -8,9 +8,9 @@ use App\Models\Student;
 
 class StudentController extends Controller
 {
-    private function rules($id = null)
+    private function rules(Request $request, $id = null)
     {
-        return [
+        return $request->validate([
             'student_id' => [
                 'required',
                 'string',
@@ -26,7 +26,7 @@ class StudentController extends Controller
             ],
             'course' => 'required|string|max:255',
             'year_level' => 'required|integer|between:1,5', 
-        ];
+        ]);
     }
 
     public function index()
@@ -41,7 +41,7 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules());
+        $validated = $this->rules($request);
         $student = Student::create($validated);
 
         return response()->json([
@@ -52,7 +52,7 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        $validated = $request->validate($this->rules($student->id));
+        $validated = $this->rules($request, $student->id);
         $student->update($validated);
 
         return response()
