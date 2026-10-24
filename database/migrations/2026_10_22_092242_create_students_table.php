@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('student_id')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('middle_name')->nullable();
             $table->string('email')->unique();
+            $table->string('phone')->unique();
             $table->string('course');
-            $table->unsignedTinyInteger('year_level');
+            $table->integer('year_level');
             $table->timestamps();
         });
     }

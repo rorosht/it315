@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Student;
 
+
 class StudentController extends Controller
 {
     private function rules(Request $request, $id = null)
@@ -14,29 +15,39 @@ class StudentController extends Controller
             'student_id' => [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('students', 'student_id')->ignore($id)
+                Rule::unique('students', 'student_id')->ignore($id),
             ],
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+
+            'first_name' => 'required|string|max:50',
+
+            'middle_name' => 'nullable|string|max:50',
+            
+            'last_name' => 'required|string|max:50',
+
             'email' => [
                 'required',
                 'email',
                 Rule::unique('students', 'email')->ignore($id),
             ],
-            'course' => 'required|string|max:255',
-            'year_level' => 'required|integer|between:1,5', 
+
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{11}$/',
+                Rule::unique('students', 'phone')->ignore($id),
+            ],
+
+            'course' => 'required|string|max:50',
+
+            'year_level' => 'required|integer|between:1,5',
         ]);
     }
 
     public function index()
     {
-        return response()->json(Student::all(), 200);
-    }
-
-    public function show(Student $student)
-    {
-        return response()->json($student, 200);
+        return response()->json(
+            Student::all(), 200
+        );
     }
 
     public function store(Request $request)
@@ -45,9 +56,14 @@ class StudentController extends Controller
         $student = Student::create($validated);
 
         return response()->json([
-            'message' => 'Student created successfully.',
+            'message' => 'Student created successfully',
             'data' => $student,
         ], 201);
+    }
+
+    public function show(Student $student)
+    {
+        return response()->json($student, 200);
     }
 
     public function update(Request $request, Student $student)
@@ -55,20 +71,19 @@ class StudentController extends Controller
         $validated = $this->rules($request, $student->id);
         $student->update($validated);
 
-        return response()
-                    ->json([
-                        'message' => 'Student updated successfully.',
-                        'data' => $student,
-                    ], 200);
+        return response()->json([
+            'message' => 'Student updated successfully',
+            'data' => $student,
+        ], 200);
     }
+
 
     public function destroy(Student $student)
     {
         $student->delete();
 
-        return response()
-                    ->json([
-                        'message' => 'Student deleted successfully'
-                    ], 200);
+        return response()->json([
+            'message' => 'Student deleted successfuly',
+        ], 200);
     }
 }
