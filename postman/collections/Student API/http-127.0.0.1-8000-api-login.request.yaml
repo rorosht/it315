@@ -1,0 +1,37 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/login
+description: ""
+url: http://127.0.0.1:8000/api/login
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: "\r
+
+    {\r
+
+    \    \"email\": \"admin@example.com\",\r
+
+    \    \"password\": \"admin123\"\r
+
+    }\r
+
+    \r
+
+    /*\r
+
+    {\r
+
+    \    \"email\": \"user@example.com\",\r
+
+    \    \"password\": \"user123\"\r
+
+    */\r\n"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: pm.collectionVariables.set("token", pm.response.json().token);
+    language: text/javascript
+order: 2000

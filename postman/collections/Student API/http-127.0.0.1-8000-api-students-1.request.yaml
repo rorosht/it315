@@ -1,0 +1,12 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/students/1
+description: ""
+url: http://127.0.0.1:8000/api/students/1
+method: GET
+headers:
+  Accept: application/json
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 6000

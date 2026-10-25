@@ -1,0 +1,33 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/students/3
+description: ""
+url: http://127.0.0.1:8000/api/students/1
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"student_id\": \"2024-12345\",\r
+
+    \    \"first_name\": \"Robert\",\r
+
+    \    \"last_name\": \"Zabala\",\r
+
+    \    \"middle_name\": \"Narciso\",\r
+
+    \    \"email\": \"robert@example.com\",\r
+
+    \    \"phone\": \"09123456789\",\r
+
+    \    \"course\": \"BSICT\",\r
+
+    \    \"year_level\": 3\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 4000
