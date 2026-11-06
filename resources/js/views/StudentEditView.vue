@@ -6,7 +6,7 @@ import StudentForm from '../components/StudentForm.vue';
 
 const route = useRoute();
 const router = useRouter();
-const emit = defineEmits(['notify']);
+const emit = defineEmits(['notify', 'auth-expired']);
 
 const studentId = route.params.id;
 const student = ref({});
@@ -20,8 +20,13 @@ async function loadStudent() {
         const data = await studentApi.getById(studentId);
         student.value = data;
     } catch (err) {
-        emit('notify', { message: err.message || 'Failed to load student data.', type: 'error' });
-        router.push({ name: 'students.index' });
+        if (err.status === 401) {
+            emit('notify', { message: 'Session expired. Please log in again.', type: 'error' });
+            emit('auth-expired');
+        } else {
+            emit('notify', { message: err.message || 'Failed to load student data.', type: 'error' });
+            router.push({ name: 'students.index' });
+        }
     } finally {
         loading.value = false;
     }
@@ -39,6 +44,11 @@ async function handleSubmit(formData) {
         if (err.status === 422 && err.errors) {
             validationErrors.value = err.errors;
             emit('notify', { message: 'Validation failed. Please correct form fields.', type: 'error' });
+        } else if (err.status === 403) {
+            emit('notify', { message: err.data?.message || 'Forbidden: Administrator role required.', type: 'error' });
+        } else if (err.status === 401) {
+            emit('notify', { message: 'Session expired. Please log in again.', type: 'error' });
+            emit('auth-expired');
         } else {
             emit('notify', { message: err.message || 'Failed to update student.', type: 'error' });
         }

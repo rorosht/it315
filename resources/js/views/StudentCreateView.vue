@@ -5,7 +5,7 @@ import { studentApi } from '../services/api';
 import StudentForm from '../components/StudentForm.vue';
 
 const router = useRouter();
-const emit = defineEmits(['notify']);
+const emit = defineEmits(['notify', 'auth-expired']);
 
 const submitting = ref(false);
 const validationErrors = ref({});
@@ -22,6 +22,11 @@ async function handleSubmit(formData) {
         if (err.status === 422 && err.errors) {
             validationErrors.value = err.errors;
             emit('notify', { message: 'Validation failed. Please correct form fields.', type: 'error' });
+        } else if (err.status === 403) {
+            emit('notify', { message: err.data?.message || 'Forbidden: Administrator role required.', type: 'error' });
+        } else if (err.status === 401) {
+            emit('notify', { message: 'Session expired. Please log in again.', type: 'error' });
+            emit('auth-expired');
         } else {
             emit('notify', { message: err.message || 'Failed to create student.', type: 'error' });
         }

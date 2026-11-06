@@ -33,9 +33,6 @@ export const authStorage = {
     }
 };
 
-/**
- * Base fetch wrapper that includes Bearer token and headers
- */
 export async function apiRequest(endpoint, options = {}) {
     const token = authStorage.getToken();
 
