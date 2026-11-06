@@ -7,7 +7,7 @@ headers:
   Accept: application/json
 body:
   type: json
-  content: "\r
+  content: "/*\r
 
     {\r
 
@@ -17,9 +17,9 @@ body:
 
     }\r
 
-    \r
+    */\r
 
-    /*\r
+    \r
 
     {\r
 
@@ -27,7 +27,7 @@ body:
 
     \    \"password\": \"user123\"\r
 
-    */\r\n"
+    }"
 auth:
   type: noauth
 scripts:
